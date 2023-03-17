@@ -1,0 +1,208 @@
+[1;31m
+Start test 1[0m
+4What would you like to do (add, show, plan, exit)?
+> show
+BWhich category do you want to print? (breakfast, lunch, dinner)?
+> lunch
+No meals found.
+4What would you like to do (add, show, plan, exit)?
+[1;31m
+Start test 2[0m
+4What would you like to do (add, show, plan, exit)?
+> add
+;Which meal do you want to add (breakfast, lunch, dinner)?
+> breakfast
+Meal's name:
+> cat
+Ingredients:
+> bread, peanut butter, jelly
+Meal added!
+4What would you like to do (add, show, plan, exit)?
+> add
+;Which meal do you want to add (breakfast, lunch, dinner)?
+> breakfast
+Meal's name:
+> ara
+Ingredients:
+> tomato, cheese, bread
+Meal added!
+4What would you like to do (add, show, plan, exit)?
+> add
+;Which meal do you want to add (breakfast, lunch, dinner)?
+> breakfast
+Meal's name:
+> zebra
+Ingredients:
+> muesli, milk, nuts
+Meal added!
+4What would you like to do (add, show, plan, exit)?
+> add
+;Which meal do you want to add (breakfast, lunch, dinner)?
+> lunch
+Meal's name:
+> dog
+Ingredients:
+> ketchup, sausage
+Meal added!
+4What would you like to do (add, show, plan, exit)?
+> add
+;Which meal do you want to add (breakfast, lunch, dinner)?
+> lunch
+Meal's name:
+> mouse
+Ingredients:
+> fish, potato
+Meal added!
+4What would you like to do (add, show, plan, exit)?
+> add
+;Which meal do you want to add (breakfast, lunch, dinner)?
+	> dinner
+Meal's name:
+> lion
+Ingredients:
+> carmel, nuts, cream
+Meal added!
+4What would you like to do (add, show, plan, exit)?
+> plan
+Monday
+cat
+ara
+zebra
+2Choose breakfast for Monday from the list above:
+> ara
+dog
+mouse
+.Choose lunch for Monday from the list above:
+> dog
+lion
+/Choose dinner for Monday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+	Tuesday
+cat
+ara
+zebra
+3Choose breakfast for Tuesday from the list above:
+	> parrot
+?This meal doesn’t exist. Choose a meal from the list above.
+> zebra
+dog
+mouse
+/Choose lunch for Tuesday from the list above:
+> mouse
+lion
+0Choose dinner for Tuesday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+Wednesday
+cat
+ara
+zebra
+5Choose breakfast for Wednesday from the list above:
+> zebra
+dog
+mouse
+1Choose lunch for Wednesday from the list above:
+> mouse
+lion
+2Choose dinner for Wednesday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+
+Thursday
+cat
+ara
+zebra
+4Choose breakfast for Thursday from the list above:
+> zebra
+dog
+mouse
+0Choose lunch for Thursday from the list above:
+> mouse
+lion
+1Choose dinner for Thursday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+Friday
+cat
+ara
+zebra
+2Choose breakfast for Friday from the list above:
+> zebra
+dog
+mouse
+.Choose lunch for Friday from the list above:
+> mouse
+lion
+/Choose dinner for Friday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+
+Saturday
+cat
+ara
+zebra
+4Choose breakfast for Saturday from the list above:
+> zebra
+dog
+mouse
+0Choose lunch for Saturday from the list above:
+> mouse
+lion
+1Choose dinner for Saturday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+Sunday
+cat
+ara
+zebra
+2Choose breakfast for Sunday from the list above:
+> zebra
+dog
+mouse
+.Choose lunch for Sunday from the list above:
+> mouse
+lion
+/Choose dinner for Sunday from the list above:
+> lion
+(Yeah! We planned the meals for Monday.
+
+Monday
+breakfast: ara
+lunch: dog
+dinner: lion
+
+	Tuesday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Wednesday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+
+Thursday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Friday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+
+Saturday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Sunday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+4What would you like to do (add, show, plan, exit)?
+> exit
+Bye!

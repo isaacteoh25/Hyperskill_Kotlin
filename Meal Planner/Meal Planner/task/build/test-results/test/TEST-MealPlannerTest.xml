@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MealPlannerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-06T01:03:21" hostname="SRC-U746046L001" time="0.982">
+  <properties/>
+  <testcase name="start" classname="MealPlannerTest" time="0.982"/>
+  <system-out><![CDATA[?[1;31m
+Start test 1?[0m
+What would you like to do (add, show, plan, exit)?
+> show
+Which category do you want to print? (breakfast, lunch, dinner)?
+> lunch
+No meals found.
+What would you like to do (add, show, plan, exit)?
+?[1;31m
+Start test 2?[0m
+What would you like to do (add, show, plan, exit)?
+> add
+Which meal do you want to add (breakfast, lunch, dinner)?
+> breakfast
+Meal's name:
+> cat
+Ingredients:
+> bread, peanut butter, jelly
+Meal added!
+What would you like to do (add, show, plan, exit)?
+> add
+Which meal do you want to add (breakfast, lunch, dinner)?
+> breakfast
+Meal's name:
+> ara
+Ingredients:
+> tomato, cheese, bread
+Meal added!
+What would you like to do (add, show, plan, exit)?
+> add
+Which meal do you want to add (breakfast, lunch, dinner)?
+> breakfast
+Meal's name:
+> zebra
+Ingredients:
+> muesli, milk, nuts
+Meal added!
+What would you like to do (add, show, plan, exit)?
+> add
+Which meal do you want to add (breakfast, lunch, dinner)?
+> lunch
+Meal's name:
+> dog
+Ingredients:
+> ketchup, sausage
+Meal added!
+What would you like to do (add, show, plan, exit)?
+> add
+Which meal do you want to add (breakfast, lunch, dinner)?
+> lunch
+Meal's name:
+> mouse
+Ingredients:
+> fish, potato
+Meal added!
+What would you like to do (add, show, plan, exit)?
+> add
+Which meal do you want to add (breakfast, lunch, dinner)?
+> dinner
+Meal's name:
+> lion
+Ingredients:
+> carmel, nuts, cream
+Meal added!
+What would you like to do (add, show, plan, exit)?
+> plan
+Monday
+cat
+ara
+zebra
+Choose breakfast for Monday from the list above:
+> ara
+dog
+mouse
+Choose lunch for Monday from the list above:
+> dog
+lion
+Choose dinner for Monday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+Tuesday
+cat
+ara
+zebra
+Choose breakfast for Tuesday from the list above:
+> parrot
+This meal doesn’t exist. Choose a meal from the list above.
+> zebra
+dog
+mouse
+Choose lunch for Tuesday from the list above:
+> mouse
+lion
+Choose dinner for Tuesday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+Wednesday
+cat
+ara
+zebra
+Choose breakfast for Wednesday from the list above:
+> zebra
+dog
+mouse
+Choose lunch for Wednesday from the list above:
+> mouse
+lion
+Choose dinner for Wednesday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+Thursday
+cat
+ara
+zebra
+Choose breakfast for Thursday from the list above:
+> zebra
+dog
+mouse
+Choose lunch for Thursday from the list above:
+> mouse
+lion
+Choose dinner for Thursday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+Friday
+cat
+ara
+zebra
+Choose breakfast for Friday from the list above:
+> zebra
+dog
+mouse
+Choose lunch for Friday from the list above:
+> mouse
+lion
+Choose dinner for Friday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+Saturday
+cat
+ara
+zebra
+Choose breakfast for Saturday from the list above:
+> zebra
+dog
+mouse
+Choose lunch for Saturday from the list above:
+> mouse
+lion
+Choose dinner for Saturday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+Sunday
+cat
+ara
+zebra
+Choose breakfast for Sunday from the list above:
+> zebra
+dog
+mouse
+Choose lunch for Sunday from the list above:
+> mouse
+lion
+Choose dinner for Sunday from the list above:
+> lion
+Yeah! We planned the meals for Monday.
+
+Monday
+breakfast: ara
+lunch: dog
+dinner: lion
+
+Tuesday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Wednesday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Thursday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Friday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Saturday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+
+Sunday
+breakfast: zebra
+lunch: mouse
+dinner: lion
+What would you like to do (add, show, plan, exit)?
+> exit
+Bye!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

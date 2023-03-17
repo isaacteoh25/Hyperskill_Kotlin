@@ -1,0 +1,297 @@
+type: edu
+files:
+- name: src/mealplanner/Main.kt
+  visible: true
+  text: |-
+    package mealplanner
+    //
+    //import mealplanner.database.DbService
+    //
+    //
+    //fun main(args: Array<String>) {
+    //    val dbName = getDatabaseName(args)
+    //    UI.start(dbName)
+    //
+    //
+    //
+    //}
+    //
+    //fun getDatabaseName(args: Array<String>) : String {
+    //    val defaultDb = "myDbTest.db"
+    //    val argsDB = args.find { arg -> arg.endsWith(".db") }
+    //
+    //    return  argsDB ?: defaultDb
+    //
+    //}
+
+
+    import mealplanner.util.Worker
+
+    fun main(args: Array<String>) {
+        require(args.size == 1) { "Database name must be specified!" }
+
+        val databaseName = args[0]
+
+        val worker = Worker(databaseName)
+
+        worker.perform()
+    }
+  learner_created: false
+- name: src/mealplanner/model/MealCategory.kt
+  visible: true
+  text: |-
+    package mealplanner.model
+
+    enum class MealCategory {
+        BREAKFAST,
+        LUNCH,
+        DINNER,
+        UNKNOWN;
+
+        companion object {
+            fun lookupByName(name: String): MealCategory {
+                return when (name.toUpperCase()) {
+                    "BREAKFAST" -> BREAKFAST
+                    "LUNCH" -> LUNCH
+                    "DINNER" -> DINNER
+                    else -> UNKNOWN
+                }
+            }
+        }
+
+        override fun toString(): String {
+            return name.toLowerCase()
+        }
+    }
+  learner_created: false
+- name: src/main/sqldelight/mealplanner/data/Dao.sq
+  visible: true
+  text: |-
+    CREATE TABLE IF NOT EXISTS Meal (
+        meal_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        meal TEXT NOT NULL,
+        category TEXT NOT NULL
+    );
+
+    CREATE UNIQUE INDEX IF NOT EXISTS IX_Meal_meal ON Meal(meal);
+
+    CREATE TABLE IF NOT EXISTS Ingredient (
+        ingredient_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        ingredient TEXT NOT NULL,
+        meal_id INTEGER NOT NULL,
+        FOREIGN KEY (meal_id) REFERENCES Meal(meal_id) ON UPDATE CASCADE ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS IX_Ingredient_meal_id ON Ingredient(meal_id);
+    CREATE INDEX IF NOT EXISTS IX_Ingredient_ingredient ON Ingredient(ingredient);
+
+    findAllMeals:
+    SELECT meal_id, meal, category FROM Meal ORDER BY meal_id;
+
+    findMealById:
+    SELECT meal_id, meal, category FROM Meal WHERE meal_id = ?;
+
+    findMealByName:
+    SELECT meal_id, meal, category FROM Meal WHERE meal = ?;
+
+    addMeal:
+    INSERT INTO Meal(meal, category) VALUES (?, ?);
+
+    modifyMeal:
+    UPDATE Meal SET meal = ?, category = ? WHERE meal_id = ?;
+
+    removeMeal:
+    DELETE FROM Meal WHERE meal_id = ?;
+
+    removeAllMeals:
+    DELETE FROM Meal;
+
+    countAllMeals:
+    SELECT COUNT(*) AS Quantity FROM Meal;
+
+    findAllIngredients:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient ORDER BY ingredient_id;
+
+    findIngredientById:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient WHERE ingredient_id = ?;
+
+    findIngredientByName:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient WHERE ingredient = ?;
+
+    findIngredientByMealId:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient WHERE meal_id = ?;
+
+    addIngredient:
+    INSERT INTO Ingredient(ingredient, meal_id) VALUES (?, ?);
+
+    modifyIngredient:
+    UPDATE Ingredient SET ingredient = ?, meal_id = ? WHERE ingredient_id = ?;
+
+    removeIngredient:
+    DELETE FROM Ingredient WHERE ingredient_id = ?;
+
+    removeAllIngredients:
+    DELETE FROM Ingredient;
+
+    countAllIngredients:
+    SELECT COUNT(*) FROM Ingredient;
+
+    lastInsertedId:
+    SELECT last_insert_rowid();
+  learner_created: false
+- name: test/KotlinTest.java
+  visible: false
+  text: |-
+    import org.hyperskill.hstest.stage.StageTest;
+
+    public abstract class KotlinTest<T> extends StageTest<T> {
+
+    }
+  learner_created: false
+- name: test/MealPlannerTest.kt
+  visible: false
+  text: |-
+    import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod
+    import org.hyperskill.hstest.testcase.CheckResult
+    import org.hyperskill.hstest.testing.TestedProgram
+    import java.io.File
+    import java.lang.IndexOutOfBoundsException
+
+    class MealPlannerTest() : KotlinTest<String>() {
+
+        private val dbName = "test.db"
+        @DynamicTestingMethod
+        open fun test(): CheckResult? {
+            val main = TestedProgram()
+
+            main.start(dbName)
+            main.execute("show")
+            val output = main.execute("lunch")
+
+
+            if (output != "No meals found.\n" +
+                    "What would you like to do (add, show, exit)?\n") {
+                return CheckResult.wrong("Wrong answer on \"show\" command.")
+            }
+            return CheckResult.correct()
+        }
+
+
+        @DynamicTestingMethod
+        open fun test2(): CheckResult? {
+
+
+            val main = TestedProgram()
+
+            main.start(dbName)
+            main.execute("add")
+            main.execute("breakfast")
+            main.execute("abracadabra")
+            val output = main.execute("eggs, salmon, broccoli, cheese")
+
+
+
+            main.execute("add")
+            main.execute("lunch")
+            main.execute("hawaii")
+            val output2 = main.execute("pineapple, flowers")
+
+            if (output2 != "Meal added!\nWhat would you like to do (add, show, exit)?\n") {
+                return CheckResult.wrong("Wrong command ending.")
+            }
+            main.execute("exit")
+
+            return CheckResult.correct();
+        }
+
+        @DynamicTestingMethod
+        open fun test3(): CheckResult? {
+            val main = TestedProgram()
+
+            main.start(dbName)
+            main.execute("show")
+            val output = main.execute("dessert")
+
+            if (output != "Wrong meal category! Choose from: breakfast, lunch, dinner.\n") {
+                return CheckResult.wrong("Wrong answer on  \"show\" command.")
+            }
+
+            val output1 = main.execute("breakfast").split("\n").reversed()
+
+            if (output1.isEmpty()) {
+                return CheckResult.wrong("Database didn't persist data before program terminating.")
+            }
+
+            var isOk = true
+
+            try {
+                if (output1[2] != "cheese" || output1[3] != "broccoli"
+                    || output1[4] != "salmon" || output1[5] != "eggs") {
+                    isOk = false
+                }
+                if (output1[7] != "Name: abracadabra") {
+                    isOk = false
+                }
+            } catch (ex: IndexOutOfBoundsException) {
+                isOk = false
+            }
+
+            if(!isOk) {
+                return CheckResult.wrong("Wrong answer on the first \"show\" command.")
+            }
+
+            main.execute("show")
+            val output3 = main.execute("lunch").split("\n").reversed()
+
+            isOk = true
+
+            try {
+                if (output3[2] != "flowers" || output3[3] != "pineapple") {
+                    isOk = false
+                }
+                if (output3[5] != "Name: hawaii") {
+                    isOk = false
+                }
+            } catch (ex: IndexOutOfBoundsException) {
+                isOk = false
+            }
+
+            if(!isOk) {
+                return CheckResult.wrong("Wrong answer on the second \"show\" command.")
+            }
+
+            main.execute("exit")
+            main.stop()
+
+            val file = File(dbName)
+            file.delete()
+
+            return CheckResult.correct()
+        }
+
+    }
+  learner_created: false
+- name: src/mealplanner/DbService.kt
+  visible: true
+  learner_created: true
+- name: src/mealplanner/Worker.kt
+  visible: true
+  learner_created: true
+- name: src/main/sqldelight/mealplanner/data/Dao.txt
+  visible: true
+  learner_created: true
+- name: src/mealplanner/model/Meal.kt
+  visible: true
+  learner_created: true
+- name: src/mealplanner/model/Ingredient.kt
+  visible: true
+  learner_created: true
+- name: test.db
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/129/stages/691/implement#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 06 Apr 2021 00:35:36 UTC
+record: 3

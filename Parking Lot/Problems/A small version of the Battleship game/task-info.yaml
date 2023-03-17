@@ -1,0 +1,18 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: |-
+    import java.util.Scanner
+
+    fun main(args: Array<String>) {
+        val input = Scanner(System.`in`)
+        // put your code here
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/6172#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Fri, 04 Dec 2020 02:50:34 UTC
+record: -1

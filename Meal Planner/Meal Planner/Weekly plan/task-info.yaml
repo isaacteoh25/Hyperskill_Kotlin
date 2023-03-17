@@ -1,0 +1,553 @@
+type: edu
+files:
+- name: src/mealplanner/Main.kt
+  visible: true
+  text: |-
+    package mealplanner
+
+    import mealplanner.util.Worker
+
+    fun main(args: Array<String>) {
+        require(args.size == 1) { "Database name must be specified!" }
+
+        val databaseName = args[0]
+
+        val worker = Worker(databaseName)
+
+        worker.perform()
+    }
+  learner_created: false
+- name: src/mealplanner/DbService.kt
+  visible: true
+  text: |-
+    //package mealplanner.database
+    //
+    //import com.squareup.sqldelight.db.SqlDriver
+    //import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+    //import mealdb.data.IngredientsDaoQueries
+    //import mealdb.data.MealDao
+    //import mealdb.data.MealDaoQueries
+    //import mealplanner.Database
+    //import mealplanner.Meal
+    //import mealplanner.Menu
+    //
+    //
+    //class DbService private constructor(private val databaseName: String) {
+    //
+    //    private val driver: SqlDriver = JdbcSqliteDriver("jdbc:sqlite:$databaseName")
+    //
+    //    init {
+    //        Database.Schema.create(driver)
+    //    }
+    //
+    //    private val database = Database(driver)
+    //    private val mealDaoQueries: MealDaoQueries = database.mealDaoQueries
+    //    private val ingredientsDaoQueries: IngredientsDaoQueries = database.ingredientsDaoQueries
+    //
+    //
+    //    fun insertIngredient(ingredient: String, meal: Meal) {
+    //
+    //        val mealDao = mealDaoQueries.findMealDao(meal.name, meal.category.category)
+    //            .executeAsOneOrNull()
+    //        mealDao?.also { dao ->
+    //            ingredientsDaoQueries.insert(ingredient, dao.meal_id)
+    //        }
+    //    }
+    //
+    //    fun insertIngredient(ingredient: String, mealDao: MealDao) {
+    //        ingredientsDaoQueries.insert(ingredient, mealDao.meal_id)
+    //    }
+    //
+    //    fun insertMeal(meal: Meal) {
+    //        val foundMealDao = mealDaoQueries.findMealDao(meal.name, meal.category.category)
+    //            .executeAsOneOrNull()
+    //
+    //        if (foundMealDao == null) {
+    //            mealDaoQueries.insert(meal.category.category, meal.name)
+    //            val createdMealDao = mealDaoQueries.findMealDao(meal.name, meal.category.category)
+    //                .executeAsOne()
+    //            meal.ingredients.forEach { ingred ->
+    //                insertIngredient(ingred, createdMealDao)
+    //            }
+    //        } else {
+    //            meal.ingredients.forEach { ingred ->
+    //                insertIngredient(ingred, foundMealDao)
+    //            }
+    //        }
+    //    }
+    //
+    //    fun initMenu() {
+    //        val listMealDao = mealDaoQueries.selectAll().executeAsList()
+    //        listMealDao.forEach { mealDao ->
+    //            val ingredientsList =
+    //                ingredientsDaoQueries.allIngredientsWithMealId(mealDao.meal_id)
+    //                    .executeAsList()
+    //                    .map { ingredientsDao -> ingredientsDao.ingredient }
+    //
+    //            val category = Meal.Category.fromName(mealDao.category)
+    //                ?: throw error("initMenu error, invalid meal category stored on database")
+    //
+    //            val meal = Meal(category, mealDao.meal, ingredientsList)
+    //
+    //            Menu.addMeal(meal);
+    //        }
+    //
+    //    }
+    //
+    //    fun close() {
+    //        driver.close()
+    //    }
+    //
+    //    companion object {
+    //        var singletonInstance:  DbService? = null;
+    //
+    //
+    //        fun getDbServiceInstance(dbName: String): DbService {
+    //            if (singletonInstance == null) {
+    //                singletonInstance  =  DbService(dbName)
+    //                return singletonInstance as DbService
+    //            }
+    //
+    //            return singletonInstance as DbService
+    //        }
+    //    }
+    //
+    //    init {
+    //        val databaseName = databaseName
+    //    }
+    //
+    //
+    //}
+  learner_created: false
+- name: src/mealplanner/Worker.kt
+  visible: true
+  text: |-
+    package mealplanner.util
+
+    import mealplanner.model.Ingredient
+    import mealplanner.model.Meal
+    import mealplanner.model.MealCategory
+    import kotlin.system.exitProcess
+
+    class Worker(databaseName: String) {
+        private var repository = MealPlannerRepository(databaseName)
+
+        fun perform() {
+            while (true) {
+                println("What would you like to do (add, show, exit)?")
+                val action = readLine()!!
+
+                when (ProgramAction.lookupByName(action.toUpperCase())) {
+                    ProgramAction.ADD -> add()
+                    ProgramAction.SHOW -> show()
+                    ProgramAction.EXIT -> exit()
+                    else -> wrongAction()
+                }
+            }
+        }
+
+        private fun add() {
+            println("Which meal do you want to add (breakfast, lunch, dinner)?")
+            var category = MealCategory.UNKNOWN
+            while (category == MealCategory.UNKNOWN) {
+                category = MealCategory.lookupByName(readLine()!!.toUpperCase())
+                if (category == MealCategory.UNKNOWN) {
+                    println("Wrong meal category! Choose from: breakfast, lunch, dinner.")
+                }
+            }
+            val regex = """[a-zA-Z ]+""".toRegex()
+            println("Meal's name:")
+            var name = ""
+            while (true) {
+                name = readLine()!!.trim()
+                if (regex.matches(name)) {
+                    break
+                } else {
+                    println("Wrong format. Use letters only!")
+                }
+            }
+            println("Ingredients:")
+            var ingredientsName = mutableListOf<String>()
+            var wrongIngredient = true
+            while (wrongIngredient) {
+                ingredientsName = readLine()!!.split(",").map { it.trim() }.toMutableList()
+                for (ingredientName in ingredientsName) {
+                    if (!regex.matches(ingredientName)) {
+                        wrongIngredient = true
+                        break
+                    } else {
+                        wrongIngredient = false
+                    }
+                }
+                if (wrongIngredient) {
+                    println("Wrong format. Use letters only!")
+                }
+            }
+            val ingredients = mutableListOf<Ingredient>()
+
+            ingredientsName.forEach {
+                val ingredient = Ingredient(name=it)
+                ingredients.add(ingredient)
+            }
+
+            repository.addMeal(Meal(name=name, category=category, ingredients=ingredients.toList()))
+            println("Meal added!")
+        }
+
+        private fun show() {
+            println("Which category do you want to print? (breakfast, lunch, dinner)?")
+            var ready = true;
+            do {
+                val category = MealCategory.lookupByName(readLine()!!)
+                if (category != MealCategory.UNKNOWN) {
+                    val meals = repository.getMealsFromCategory(category)
+                    if (meals.isNotEmpty()) {
+                        println("Category: ${category.
+                        dbName}")
+                        for (meal in meals) {
+                            println("Name: ${meal.name}")
+                            println() // only because required by the test engine
+                            for (ingredient in meal.ingredients) {
+                                println(ingredient.name)
+                            }
+                            println() // only because required by the test engine
+                        }
+                    } else {
+                        println("No meals found.")
+                    }
+    // just for fun :-), and because we can ;-)
+    //                val mealsSummary = repository.getMealsSummaryFromCategory(category)
+    //                if (mealsSummary.isNotEmpty()) {
+    //                    println("Category: ${category.dbName}")
+    //                    for (mealSummary in mealsSummary) {
+    //                        println(mealSummary)
+    //                    }
+    //                } else {
+    //                    println("No meals found.")
+    //                }
+                } else {
+                    println("Wrong meal category! Choose from: breakfast, lunch, dinner.")
+                    ready = false
+                }
+            } while (!ready)
+        }
+
+        private fun exit() {
+            repository.close()
+
+            println("Bye!")
+            exitProcess(0)
+        }
+
+        private fun wrongAction() {
+            "Wrong action! Choose from: add, show, exit."
+        }
+    }
+  learner_created: false
+- name: src/main/sqldelight/mealplanner/data/Dao.txt
+  visible: true
+  learner_created: false
+- name: src/mealplanner/model/MealCategory.kt
+  visible: true
+  text: |-
+    package mealplanner.model
+
+    enum class MealCategory {
+        BREAKFAST,
+        LUNCH,
+        DINNER,
+        UNKNOWN;
+
+        companion object {
+            fun lookupByName(name: String): MealCategory {
+                return when (name.toUpperCase()) {
+                    "BREAKFAST" -> BREAKFAST
+                    "LUNCH" -> LUNCH
+                    "DINNER" -> DINNER
+                    else -> UNKNOWN
+                }
+            }
+        }
+
+        override fun toString(): String {
+            return name.toLowerCase()
+        }
+
+        val dbName: String
+            get() = this.name.toLowerCase()
+    }
+  learner_created: false
+- name: src/main/sqldelight/mealplanner/data/Dao.sq
+  visible: true
+  text: |-
+    CREATE TABLE IF NOT EXISTS Meal (
+        meal_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        meal TEXT NOT NULL,
+        category TEXT NOT NULL
+    );
+
+    CREATE UNIQUE INDEX IF NOT EXISTS IX_Meal_meal ON Meal(meal);
+
+    CREATE TABLE IF NOT EXISTS Ingredient (
+        ingredient_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        ingredient TEXT NOT NULL,
+        meal_id INTEGER NOT NULL,
+        FOREIGN KEY (meal_id) REFERENCES Meal(meal_id) ON UPDATE CASCADE ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS IX_Ingredient_meal_id ON Ingredient(meal_id);
+    CREATE INDEX IF NOT EXISTS IX_Ingredient_ingredient ON Ingredient(ingredient);
+
+    findAllMeals:
+    SELECT meal_id, meal, category FROM Meal ORDER BY meal_id;
+
+    findMealById:
+    SELECT meal_id, meal, category FROM Meal WHERE meal_id = ?;
+
+    findMealByName:
+    SELECT meal_id, meal, category FROM Meal WHERE meal = ?;
+
+    findMealsByCategory:
+    SELECT meal_id, meal, category FROM Meal WHERE category = ? ORDER BY meal_id;
+
+    findMealsSummaryByCategory:
+    SELECT
+        m.meal || ' ' || GROUP_CONCAT(i.ingredient, ' ')
+    FROM
+        Meal AS m
+        INNER JOIN
+        Ingredient AS i
+        ON (m.meal_id = i.meal_id)
+    WHERE
+        m.category = ?
+    GROUP BY
+        m.meal_id,
+        m.meal
+    ORDER BY
+        m.meal_id;
+
+    addMeal:
+    INSERT INTO Meal(meal, category) VALUES (?, ?);
+
+    modifyMeal:
+    UPDATE Meal SET meal = ?, category = ? WHERE meal_id = ?;
+
+    removeMeal:
+    DELETE FROM Meal WHERE meal_id = ?;
+
+    removeAllMeals:
+    DELETE FROM Meal;
+
+    countAllMeals:
+    SELECT COUNT(*) AS Quantity FROM Meal;
+
+    findAllIngredients:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient ORDER BY ingredient_id;
+
+    findIngredientById:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient WHERE ingredient_id = ?;
+
+    findIngredientByName:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient WHERE ingredient = ?;
+
+    findIngredientByMealId:
+    SELECT ingredient_id, ingredient, meal_id FROM Ingredient WHERE meal_id = ?;
+
+    addIngredient:
+    INSERT INTO Ingredient(ingredient, meal_id) VALUES (?, ?);
+
+    modifyIngredient:
+    UPDATE Ingredient SET ingredient = ?, meal_id = ? WHERE ingredient_id = ?;
+
+    removeIngredient:
+    DELETE FROM Ingredient WHERE ingredient_id = ?;
+
+    removeAllIngredients:
+    DELETE FROM Ingredient;
+
+    countAllIngredients:
+    SELECT COUNT(*) FROM Ingredient;
+
+    lastInsertedId:
+    SELECT last_insert_rowid();
+  learner_created: false
+- name: src/mealplanner/model/Meal.kt
+  visible: true
+  text: |-
+    package mealplanner.model
+
+    import java.lang.StringBuilder
+
+    data class Meal(val id: Long,
+                    val name: String,
+                    val category: MealCategory,
+                    val ingredients: List<Ingredient>) {
+
+        constructor(name: String, category: MealCategory, ingredients: List<Ingredient>) :
+                this(NONEXISTENT_ID, name, category, ingredients)
+
+        override fun toString(): String {
+            var result = StringBuilder()
+
+            val newLine = System.lineSeparator()
+
+            result.append("Category: ${category}${newLine}")
+            result.append("Name: ${name}${newLine}")
+
+            result.append("Ingredients:${newLine}")
+            for (ingredient in ingredients) {
+                result.append("${ingredient}${newLine}")
+            }
+
+            return result.toString().substring(0, (result.length - 2))
+        }
+
+        companion object {
+            const val NONEXISTENT_ID = -1L;
+        }
+    }
+  learner_created: false
+- name: src/mealplanner/model/Ingredient.kt
+  visible: true
+  text: |-
+    package mealplanner.model
+
+    data class Ingredient (val id: Long,
+                           val name: String) {
+
+        constructor(name: String) : this(NONEXISTENT_ID, name)
+
+        override fun toString(): String {
+            return name
+        }
+
+        companion object {
+            const val NONEXISTENT_ID = -1L;
+        }
+    }
+  learner_created: false
+- name: test/KotlinTest.java
+  visible: false
+  text: |-
+    import org.hyperskill.hstest.stage.StageTest;
+
+    public abstract class KotlinTest<T> extends StageTest<T> {
+
+    }
+  learner_created: false
+- name: test/MealPlannerTest.kt
+  visible: false
+  text: |-
+    import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod
+    import org.hyperskill.hstest.testcase.CheckResult
+    import org.hyperskill.hstest.testing.TestedProgram
+    import java.io.File
+
+    class MealPlannerTest() : KotlinTest<String>() {
+
+        private val dbName = "test.db"
+
+        @DynamicTestingMethod
+        open fun test(): CheckResult? {
+            val main = TestedProgram()
+
+            main.start(dbName)
+            main.execute("show")
+            val output = main.execute("lunch")
+
+
+            if (output != "No meals found.\n" +
+                    "What would you like to do (add, show, plan, exit)?\n") {
+                return CheckResult.wrong("Wrong answer on \"show\" command.")
+            }
+            return CheckResult.correct()
+        }
+
+        @DynamicTestingMethod
+        open fun test2(): CheckResult? {
+            val main = TestedProgram()
+
+            main.start(dbName)
+            main.execute("add")
+            main.execute("breakfast")
+            main.execute("cat")
+            main.execute("bread, peanut butter, jelly")
+
+            main.execute("add")
+            main.execute("breakfast")
+            main.execute("ara")
+            main.execute("tomato, cheese, bread")
+
+            main.execute("add")
+            main.execute("breakfast")
+            main.execute("zebra")
+            main.execute("muesli, milk, nuts")
+
+            main.execute("add")
+            main.execute("lunch")
+            main.execute("dog")
+            main.execute("ketchup, sausage")
+
+            main.execute("add")
+            main.execute("lunch")
+            main.execute("mouse")
+            main.execute("fish, potato")
+
+            main.execute("add")
+            main.execute("dinner")
+            main.execute("lion")
+            main.execute("carmel, nuts, cream")
+
+            val output = main.execute("plan").split("\n")
+            if (output[1] != "ara" && output[2] != "cat" && output[3] != "zebra") {
+                return CheckResult.wrong("List of meals not sorted.")
+            }
+
+            main.execute("ara")
+            main.execute("dog")
+            val output2 = main.execute("lion").toLowerCase()
+            if (!output2.contains("yeah! we planned the meals for monday.\n") ) {
+                return CheckResult.wrong("Wrong answer on \"plan\" command.")
+            }
+
+            val output3 = main.execute("parrot")
+            if (output3 != "This meal doesn’t exist. Choose a meal from the list above.\n") {
+                return CheckResult.wrong("Wrong answer on \"plan\" command.")
+            }
+            repeat(5) {
+                main.execute("zebra")
+                main.execute("mouse")
+                main.execute("lion")
+            }
+            main.execute("zebra")
+            main.execute("mouse")
+            val output4 = main.execute("lion").split("\n").filterNot { it.isEmpty() }
+
+            if(output[0].toLowerCase() != "yeah! we planned the meals for sunday." &&
+                    output4[1].toLowerCase() != "monday" && output4[2].toLowerCase() != "breakfast: ara"
+                    && output4[3].toLowerCase() != "lunch: dog" && output4[4].toLowerCase() != "dinner: lion") {
+                return CheckResult.wrong("Wrong answer on \"plan\" command.")
+            }
+
+            main.execute("exit")
+            main.stop()
+
+            val file = File(dbName)
+            file.delete()
+
+            return CheckResult.correct()
+        }
+    }
+  learner_created: false
+- name: src/mealplanner/model/Plan.kt
+  visible: true
+  learner_created: true
+- name: test.db
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/129/stages/689/implement#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 06 Apr 2021 01:03:22 UTC
+record: 5

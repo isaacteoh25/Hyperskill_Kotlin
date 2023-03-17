@@ -1,0 +1,238 @@
+type: edu
+files:
+- name: src/gitinternals/Main.kt
+  visible: true
+  text: |
+    package gitinternals
+
+    fun main() {
+        // write your code here
+    }
+  learner_created: false
+- name: test/GitInternalsTest.java
+  visible: false
+  text: |
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testcase.TestCase;
+    import gitinternals.MainKt;
+
+    import java.util.Arrays;
+    import java.util.List;
+
+    class CheckFailException extends Exception {
+        public CheckFailException(String s) {
+            super(s);
+        }
+    }
+
+
+    public class GitInternalsTest extends StageTest<List<String>> {
+
+        public GitInternalsTest() {
+            super(MainKt.class);
+        }
+
+        @Override
+        public List<TestCase<List<String>>> generate() {
+
+            return Arrays.asList(
+                    new TestCase<List<String>>()
+                            .setInput(
+                                    "test\n" +
+                                    "cat-file\n" +
+                                    "0eee6a98471a350b2c2316313114185ecaf82f0e\n")
+                            .setAttach(Arrays.asList(
+                                    "Enter .git directory location:",
+                                    "Enter command:",
+                                    "Enter git object hash:",
+                                    "*COMMIT*",
+                                    "tree: 79401ddb0e2c0fe0472c813754dd4a8873b66a84",
+                                    "parents: 12a4717e84b5e414f93cc91ca50a6d5a6c3563a0",
+                                    "author: Smith mr.smith@matrix original timestamp: 2020-03-29 17:18:20 +03:00",
+                                    "committer: Cypher cypher@matrix commit timestamp: 2020-03-29 17:25:52 +03:00",
+                                    "commit message:",
+                                    "get docs from feature1")),
+                    new TestCase<List<String>>()
+                            .setInput(
+                                    "test\n" +
+                                    "cat-file\n" +
+                                    "490f96725348e92770d3c6bab9ec532564b7ebe0\n")
+                            .setAttach(Arrays.asList(
+                                    "Enter .git directory location:",
+                                    "Enter command:",
+                                    "Enter git object hash:",
+                                    "*BLOB*",
+                                    "fun main() {",
+                                    "    while(true) {",
+                                    "        println(\"Hello Hyperskill student!\")",
+                                    "    }",
+                                    "} ")),
+                    new TestCase<List<String>>()
+                            .setInput(
+                                    "test\n" +
+                                    "cat-file\n" +
+                                    "fb043556c251cb450a0d55e4ceb1ff35e12029c3\n")
+                            .setAttach(Arrays.asList(
+                                    "Enter .git directory location:",
+                                    "Enter command:",
+                                    "Enter git object hash:",
+                                    "*TREE*",
+                                    "100644 2b26c15c4375d90203783fb4c2a45ff4b571a6 main.kt",
+                                    "100644 4a8abe7b618ddf9c55adbea359ce891775794a61 readme.txt")),
+                    new TestCase<List<String>>()
+                            .setInput(
+                                    "test\n" +
+                                    "list-branches\n")
+                            .setAttach(Arrays.asList(
+                                    "Enter .git directory location:",
+                                    "Enter command:",
+                                    "  feature1",
+                                    "  feature2",
+                                    "* master"))
+            );
+        }
+
+        @Override
+        public CheckResult check(String reply, List<String> expectedOutput) {
+            List<String> lines = Arrays.asList(reply.split("(\\r\\n|\\r|\\n)"));
+
+            if (lines.size() != expectedOutput.size()) {
+                return CheckResult.wrong(String.format(
+                        "Number of lines in your output (%d) does not match expected value(%d)",
+                        lines.size(), expectedOutput.size()));
+            }
+
+            for (int i = 0; i < lines.size(); i++) {
+                if (!lines.get(i).equals(expectedOutput.get(i))) {
+                    return CheckResult.wrong(String.format(
+                            "Output text at line (%d) (%s) does not match expected (%s)",
+                            i, lines.get(i), expectedOutput.get(i)));
+                }
+            }
+
+
+            return CheckResult.correct();
+        }
+    }
+  learner_created: false
+- name: test/HEAD
+  visible: false
+  learner_created: false
+- name: test/objects/0e/ee6a98471a350b2c2316313114185ecaf82f0e
+  visible: false
+  learner_created: false
+- name: test/objects/10/9e8050b41bd10b81be0a51a5e67327f5609551
+  visible: false
+  learner_created: false
+- name: test/objects/12/a4717e84b5e414f93cc91ca50a6d5a6c3563a0
+  visible: false
+  learner_created: false
+- name: test/objects/2b/26c15c04375d90203783fb4c2a45ff04b571a6
+  visible: false
+  learner_created: false
+- name: test/objects/30/0b1c67b5539bfdcb30f2863d6ac3b3377ad00b
+  visible: false
+  learner_created: false
+- name: test/objects/31/d679c1c2b8fc787ae014c501d4fa6545faa138
+  visible: false
+  learner_created: false
+- name: test/objects/41/07cf41cf55c4fd38e9da8f3d08d1eaefc3254a
+  visible: false
+  learner_created: false
+- name: test/objects/43/6f2e7402dc154922dfb3f5513605bb5e3e929c
+  visible: false
+  learner_created: false
+- name: test/objects/49/0f96725348e92770d3c6bab9ec532564b7ebe0
+  visible: false
+  learner_created: false
+- name: test/objects/4a/8abe7b618ddf9c55adbea359ce891775794a61
+  visible: false
+  learner_created: false
+- name: test/objects/4e/33b9879a28ce8462b599fda71625f717ec8b8b
+  visible: false
+  learner_created: false
+- name: test/objects/61/8383db6d7ee3bd2e97b871205f113b6a3ba854
+  visible: false
+  learner_created: false
+- name: test/objects/6d/537a47eddc11f866bcc2013703bf31bfcf9ed8
+  visible: false
+  learner_created: false
+- name: test/objects/73/324685d9dbd1fdda87f3c5c6f77d79c1b769c2
+  visible: false
+  learner_created: false
+- name: test/objects/74/198c849dbbcd51d060c59253a4757eedb9bd12
+  visible: false
+  learner_created: false
+- name: test/objects/75/1543c76e07eeb88c1ef5ed5a0a0b15a2f9f875
+  visible: false
+  learner_created: false
+- name: test/objects/79/401ddb0e2c0fe0472c813754dd4a8873b66a84
+  visible: false
+  learner_created: false
+- name: test/objects/86/68fe82df35b37902b619ca29028fa59c496532
+  visible: false
+  learner_created: false
+- name: test/objects/97/e638cc1c7135580c3ff93162e727148e1bad05
+  visible: false
+  learner_created: false
+- name: test/objects/a7/b882bbf2db5d90287e9affc7e6f3b3c740b327
+  visible: false
+  learner_created: false
+- name: test/objects/a8/7a4a0e9fcf5a8a091c54909b674ac2a051f5e8
+  visible: false
+  learner_created: false
+- name: test/objects/ac/2731ee243bb1111dd93916bb3296ee7f7e23ef
+  visible: false
+  learner_created: false
+- name: test/objects/ad/3a818dc87b9940935b24a5aa93fac00f086bf9
+  visible: false
+  learner_created: false
+- name: test/objects/b6/28add5fd4be3bdd2cdb776dfa035cc69956859
+  visible: false
+  learner_created: false
+- name: test/objects/c1/6289b5404b12681ffa9e81ea072432a515ad8d
+  visible: false
+  learner_created: false
+- name: test/objects/c2/d888ec7f06b71b5ec8712b0464d1ca7a0a9ffc
+  visible: false
+  learner_created: false
+- name: test/objects/da/5c94c98ad34735a539a0f90d0e9c6bba779792
+  visible: false
+  learner_created: false
+- name: test/objects/e1/7273ae31b753dad1fe5ee0ef3e5878a21bd3f9
+  visible: false
+  learner_created: false
+- name: test/objects/e8/1d4d80d93921c28e985925c6d42b4b42d8758c
+  visible: false
+  learner_created: false
+- name: test/objects/ed/09032dc1c2d1650f823e3332876483d2e9625f
+  visible: false
+  learner_created: false
+- name: test/objects/f6/74b5d3a4c6cef5815b4e72ef2ea1bbe46b786b
+  visible: false
+  learner_created: false
+- name: test/objects/fb/043556c251cb450a0d55e4ceb1ff35e12029c3
+  visible: false
+  learner_created: false
+- name: test/objects/fd/362f3f305819d17b4359444aa83e17e7d6924a
+  visible: false
+  learner_created: false
+- name: test/objects/fe/853d1f316ab467d355f9de48182958780b35b5
+  visible: false
+  learner_created: false
+- name: test/refs/heads/master
+  visible: false
+  learner_created: false
+- name: test/refs/heads/feature1
+  visible: false
+  learner_created: false
+- name: test/refs/heads/feature2
+  visible: false
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/110/stages/599/implement#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 29 Dec 2020 00:27:03 UTC
+record: 5

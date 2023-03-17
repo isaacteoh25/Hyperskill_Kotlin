@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Git_Internals.iml" filepath="$PROJECT_DIR$/.idea/modules/Git_Internals.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Git Internals/task/Git_Internals.Git_Internals-task.iml" filepath="$PROJECT_DIR$/.idea/modules/Git Internals/task/Git_Internals.Git_Internals-task.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Git Internals/task/Git_Internals.Git_Internals-task.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Git Internals/task/Git_Internals.Git_Internals-task.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Git Internals/task/Git_Internals.Git_Internals-task.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Git Internals/task/Git_Internals.Git_Internals-task.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Division problem/Git_Internals.Problems-Division_problem.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Division problem/Git_Internals.Problems-Division_problem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Division problem/Git_Internals.Problems-Division_problem.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Division problem/Git_Internals.Problems-Division_problem.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Division problem/Git_Internals.Problems-Division_problem.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Division problem/Git_Internals.Problems-Division_problem.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Filter/Git_Internals.Problems-Filter.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Filter/Git_Internals.Problems-Filter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Filter/Git_Internals.Problems-Filter.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Filter/Git_Internals.Problems-Filter.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Filter/Git_Internals.Problems-Filter.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Filter/Git_Internals.Problems-Filter.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Subtraction/Git_Internals.Problems-Subtraction.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Subtraction/Git_Internals.Problems-Subtraction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Subtraction/Git_Internals.Problems-Subtraction.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Subtraction/Git_Internals.Problems-Subtraction.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Subtraction/Git_Internals.Problems-Subtraction.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Subtraction/Git_Internals.Problems-Subtraction.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/Git_Internals.util.iml" filepath="$PROJECT_DIR$/.idea/modules/util/Git_Internals.util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/Git_Internals.util.main.iml" filepath="$PROJECT_DIR$/.idea/modules/util/Git_Internals.util.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/Git_Internals.util.test.iml" filepath="$PROJECT_DIR$/.idea/modules/util/Git_Internals.util.test.iml" />
+    </modules>
+  </component>
+</project>

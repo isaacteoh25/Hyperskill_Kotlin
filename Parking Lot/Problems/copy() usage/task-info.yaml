@@ -1,0 +1,21 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: |-
+    import java.util.Scanner
+
+    // do not change this data class
+    data class Box(val height: Int, val length: Int, val width: Int)
+
+    fun main(args: Array<String>) {
+        val input = Scanner(System.`in`)
+        // implement your code here
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/8533#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Fri, 04 Dec 2020 07:16:46 UTC
+record: -1

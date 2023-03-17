@@ -1,0 +1,422 @@
+type: edu
+files:
+- name: src/mealplanner/Main.kt
+  visible: true
+  text: |-
+    package mealplanner
+
+    fun main() {
+        UI.start()
+    }
+    //package mealplanner
+    //
+    //private data class Meals(val time: String, val meal: String, val ing: String)
+    //{
+    //    var errors = 0
+    //
+    //    constructor(time: String, meal: String,ing: String, errors: Int = 0) : this(time, meal, ing) {
+    //        this.errors = errors
+    //    }
+    //
+    //    override fun toString(): String = "(\"$time\":\"$meal\":\"$ing\")"
+    //}
+    //object Deck : MutableSet<Meals> by mutableSetOf() {
+    //    fun containsTime(time: String) = this.map { it.time }.contains(time)
+    //    fun containsMeal(meal: String) = this.map { it.meal }.contains(meal)
+    //    fun containsIng(ing: String) = this.map { it.ing }.contains(ing)
+    //}
+    //
+    ////private var list: MutableList<Meals> = mutableListOf()
+    //fun main() {
+    //while (true){
+    //    // write your code here
+    //    val timeList: MutableList<String> = mutableListOf()
+    //    val mealList: MutableList<String> = mutableListOf()
+    //    val ingList: MutableList<String> = mutableListOf()
+    //    println("What would you like to do (add, show, exit)?")
+    //    val menu = readLine()!!
+    //    if (menu == "add") {
+    //        println("Which meal do you want to add (breakfast, lunch, dinner)?")
+    //        var time = readLine()!!
+    //        val list = listOf("breakfast", "dinner", "lunch")
+    //        if (time !in list){
+    //            println("Wrong meal category! Choose from: breakfast, lunch, dinner.")
+    //            time = readLine()!!}
+    ////        timeList.toMutableList().add(time)
+    //        println("Meal's name:")
+    //        var meal = readLine()!!
+    //        if (!allLetters(meal)) {
+    //            println("Wrong format. Use letters only!")
+    //            meal = readLine()!!
+    //        }
+    ////        timeList.toMutableList().add(meal)
+    //        println("Ingredients:")
+    //        var ing = readLine()!!
+    //        if (!allLetters(ing)) {
+    //            println("Wrong format. Use letters only!")
+    //            ing = readLine()!!
+    //        }
+    ////        ingList.toMutableList().add(ing)
+    //        Deck.add(Meals(time, meal, ing))
+    //        println("Meal added!")
+    //    } else if (menu == "show") {
+    //        if (Deck.size > 0) {
+    //            for (card in Deck) {
+    //                print(
+    //                    "Category: ${card.time}\n" +
+    //                            "Name: ${card.meal}\n" +
+    //                            "Ingredients:\n"
+    //                )
+    //                for (i in card.ing.split(",")) println(i)
+    //            }
+    //        }
+    //        else{
+    //            println("No meals saved. Add meal first.")
+    //        }
+    //    }
+    //        else if (menu == "exit") {
+    //            println("Bye!")
+    //        break
+    ////    for (i in 1..5 step 2) print(i)
+    //
+    //
+    //    }
+    //}
+    //}
+    //fun main() {
+    //    val meals = mutableMapOf<String, List<String>>()
+    //    val getCommand = { getString("What would you like to do (add, show, exit)?") }
+    //    var command = getCommand()
+    //
+    //    while (command != "exit") {
+    //        when (command) {
+    //            "add" -> addMeal(meals)
+    //            "show" -> printMeals(meals)
+    //        }
+    //        command = getCommand()
+    //    }
+    //    println("Bye!")
+    //}
+    //
+    //fun addMeal(meals: MutableMap<String, List<String>>) {
+    //    var category = getString("Which meal do you want to add (breakfast, lunch, dinner)?")
+    //
+    //    while (category != "breakfast" && category != "lunch" && category != "dinner")
+    //        category = getString("Wrong meal category! Choose from: breakfast, lunch, dinner.")
+    //
+    //    val meal = getLetters("Meal's name:")
+    //    val ingredients = getLetters("Ingredients:")
+    //
+    //    meals["$category#$meal"] = ingredients.split(",").map { it.trim() }
+    //    println("Meal added!")
+    //}
+    //
+    //fun printMeals(meals: Map<String, List<String>>) {
+    //    if (meals.isEmpty()) println("No meals saved. Add meal first.") else {
+    //        meals.forEach {
+    //            println("Category: ${it.key.split("#")[0]}")
+    //            println("Name: ${it.key.split("#")[1]}\nIngredients:")
+    //            it.value.forEach { ingredient -> println(ingredient) }
+    //        }
+    //    }
+    //}
+    //
+    //fun getLetters(usrText: String): String {
+    //    var letters = getString(usrText)
+    //
+    //    while (!allLetters(letters)) letters = getString("Wrong format. Use letters only!")
+    //    return letters
+    //}
+    //
+    //fun allLetters(words: String): Boolean {
+    //    for (char in words) if (char != ' ' && !char.isLetter() && char != ',') return false
+    //    return true
+    //}
+    //
+    //fun getString(text: String): String {
+    //    println(text)
+    //    return readLine()!!
+    //}
+  learner_created: false
+- name: src/mealplanner/UI.kt
+  visible: true
+  text: |-
+    package mealplanner
+
+    object UI {
+
+        private val commandMenuString = "What would you like to do (${Command.commandsString})?"
+        private val addMenuString = "Which meal do you want to add (${Meal.Category.categoriesString})?"
+        private val invalidCategory = "Wrong meal category! Choose from: ${Meal.Category.categoriesString}."
+        private const val invalidFormat = "Wrong format. Use letters only!"
+        private const val queryMealsName = "Meal's name:"
+        private const val queryIngredients = "Ingredients:"
+        private const val addSucceeded = "Meal added!"
+        private const val noMealsSaved = "No meals saved. Add meal first."
+        private const val invalidCommand = "Invalid command, try again"
+        private const val bye = "Bye!"
+        private const val invalidStringDefault = "1"
+
+
+        fun start() {
+            while(true) {
+                Command.NEXT.execute()
+            }
+        }
+
+        fun addMealFromInput(): Meal {
+            println(addMenuString)
+            val category = queryMealCategory()
+
+            println(queryMealsName)
+            val name = queryMealName()
+
+            println(queryIngredients)
+            val ingredients = queryMealIngredients()
+
+            println(addSucceeded)
+            return Meal(category, name, ingredients)
+        }
+
+        private fun queryMealCategory(): Meal.Category {
+            //println(addMenuString)
+            val category = Meal.Category.fromName(
+                readLine() ?: invalidStringDefault
+            )
+
+            if(category == null) {
+                println(invalidCategory)
+                return queryMealCategory()
+            }
+            return category
+        }
+
+        private fun queryMealName(): String {
+            //println(queryMealsName)
+            val name = readLine() ?: invalidStringDefault
+            if(!Meal.Validator.validateWord(name)) {
+                println(invalidFormat)
+                return queryMealName()
+            }
+            return name
+        }
+
+        private fun queryMealIngredients(): List<String> {
+            //println(queryIngredients)
+            val ingredients:List<String> = (readLine() ?: invalidStringDefault).split(", ")
+                .map(String::trim)
+                .toList()
+            if(ingredients.any { ingredient -> !Meal.Validator.validateWord(ingredient) }) {
+                println(invalidFormat)
+                return queryMealIngredients()
+
+            }
+            return ingredients
+        }
+
+        fun printMenu(meals: List<Meal>) {
+            meals.apply{
+                if(isEmpty()) {
+                    println(noMealsSaved)
+                } else {
+                    meals.forEach(::println)
+                }
+            }
+        }
+
+        fun nextCommand() {
+            println(commandMenuString)
+            val commandStr = readLine() ?: invalidStringDefault
+            Command.fromName(commandStr).execute()
+
+        }
+
+        fun tryAgain() {
+            println(invalidCommand)
+
+        }
+
+        enum class Command(private val runnable: Runnable) {
+            ADD(Menu::addMealFromInput), SHOW(Menu::printMenu),
+            NEXT(UI::nextCommand), TRY_AGAIN(UI::tryAgain),
+            EXIT( {  -> println(UI.bye); kotlin.system.exitProcess(0) } );
+
+
+            fun execute()   {
+                runnable.run()
+            }
+
+            companion object {
+
+                val commandsString = values()
+                    .filter { it !in listOf(TRY_AGAIN, NEXT)}
+                    //.filter { it != TRY_AGAIN && it != NEXT}
+                    .joinToString(", ") { it.name.toLowerCase() }
+
+                fun fromName(name: String): Command {
+                    return Command.values().firstOrNull(){ it.name.equals(name, ignoreCase = true)} ?: TRY_AGAIN
+                }
+            }
+        }
+    }
+  learner_created: false
+- name: src/mealplanner/Menu.kt
+  visible: true
+  text: |-
+    package mealplanner
+
+    object Menu {
+
+        private val meals: MutableList<Meal> = mutableListOf()
+
+        fun addMealFromInput(){
+            meals.add(UI.addMealFromInput())
+        }
+
+        fun printMenu() {
+            UI.printMenu(meals)
+        }
+    }
+  learner_created: false
+- name: src/mealplanner/Meal.kt
+  visible: true
+  text: |-
+    package mealplanner
+
+    class Meal(private val category: Category, private val name: String, private val ingredients: List<String>) {
+
+
+        override fun toString(): String {
+
+            return "Category: $category\n" +
+                    "Name: $name\n" +
+                    ingredients.joinToString(
+                        "\n", "Ingredients: \n"
+                    )
+        }
+
+
+        enum class Category(val category: String) {
+            BREAKFAST("breakfast"), LUNCH("lunch"), DINNER("dinner");
+
+
+            override fun toString(): String {
+                return category
+            }
+
+            companion object {
+                val categoriesString: String = Meal.Category.values()
+                    .map(Meal.Category::category)
+                    .joinToString(", ")
+
+                fun fromName(name: String): Category? {
+                    return values().firstOrNull { it.category == name }
+                }
+            }
+        }
+
+        object Validator {
+            fun validateWord(word: String): Boolean {
+                return word.all { char -> char.isLetter() || char == ' ' }
+            }
+        }
+    }
+  learner_created: false
+- name: test/KotlinTest.java
+  visible: false
+  text: |-
+    import org.hyperskill.hstest.stage.StageTest;
+
+    public abstract class KotlinTest<T> extends StageTest<T> {
+
+    }
+  learner_created: false
+- name: test/MealPlannerTest.kt
+  visible: false
+  text: |-
+    import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod
+    import org.hyperskill.hstest.exception.outcomes.TestPassed
+    import org.hyperskill.hstest.testcase.CheckResult
+    import org.hyperskill.hstest.testing.TestedProgram
+    import java.io.File
+    import java.lang.IndexOutOfBoundsException
+
+    class MealPlannerTest() : KotlinTest<String>() {
+
+        private val dbName = "test.db"
+        @DynamicTestingMethod
+        open fun test(): CheckResult? {
+            val main = TestedProgram()
+
+            main.start(dbName)
+            val output = main.execute("show")
+
+            if (output != "No meals saved. Add meal first.\n" +
+                    "What would you like to do (add, show, exit)?\n") {
+                return CheckResult.wrong("Wrong answer on  \"show\" command.")
+            }
+            return CheckResult.correct()
+        }
+
+        @DynamicTestingMethod
+        open fun test2(): CheckResult? {
+
+            val main = TestedProgram()
+
+            main.start(dbName)
+            main.execute("add")
+            main.execute("breakfast")
+            main.execute("abracadabra")
+            val output = main.execute("eggs, salmon, broccoli, cheese")
+
+            if (output != "Meal added!\nWhat would you like to do (add, show, exit)?\n") {
+                return CheckResult.wrong("Wrong command ending.")
+            }
+            main.execute("exit")
+
+            return CheckResult.correct();
+        }
+
+        @DynamicTestingMethod
+        open fun test3(): CheckResult? {
+            val main = TestedProgram()
+
+            main.start(dbName)
+            val output = main.execute("show").split("\n").reversed()
+
+            var isOk = true
+
+            try {
+                if (output[2] != "cheese" || output[3] != "broccoli"
+                    || output[4] != "salmon" || output[5] != "eggs") {
+                    isOk = false
+                }
+                if (output[7] != "Name: abracadabra") {
+                    isOk = false
+                }
+            } catch (ex: IndexOutOfBoundsException) {
+                isOk = false
+            }
+
+            if(!isOk) {
+                return CheckResult.wrong("Database didn't persist data before program terminating.")
+            }
+
+            main.execute("exit")
+
+            val file = File(dbName)
+            file.delete()
+
+            return CheckResult.correct()
+        }
+    }
+  learner_created: false
+- name: src/mealplanner/model/MealCategory.kt
+  visible: true
+  learner_created: true
+- name: src/main/sqldelight/mealplanner/data/Dao.sq
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/129/stages/688/implement#comment
+status: Solved
+record: 2

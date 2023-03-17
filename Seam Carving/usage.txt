@@ -1,0 +1,3 @@
+java Main -in sky.png -out sky_negative.png
+
+java Main -in sky.png -out sky-horizontal-seam.png
